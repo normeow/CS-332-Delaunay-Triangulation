@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CS-332-Delaunay-Triangulation", "CS-332-Delaunay-Triangulation\CS-332-Delaunay-Triangulation.csproj", "{1A417EFF-4560-4330-8045-600EFEBC1215}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A417EFF-4560-4330-8045-600EFEBC1215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A417EFF-4560-4330-8045-600EFEBC1215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A417EFF-4560-4330-8045-600EFEBC1215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A417EFF-4560-4330-8045-600EFEBC1215}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A969CC9E-C76D-44F8-A019-A75A3AB29516}
+	EndGlobalSection
+EndGlobal
