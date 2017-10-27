@@ -14,10 +14,31 @@ namespace CS_332_Delaunay_Triangulation
         {
             this.points = points;
             var res = new List<Tuple<Point, Point>>();
+            var frontier = new List<Edge>();
+            frontier.Add(FindFirstEdge());
+            
+            while (frontier.Count != 0)
+            {
+                // find and exctract min edge
+                var minEdge = frontier.Min();
+                var point = FindMate(minEdge);
+                if (point != null)
+                {
+                    // add new edges to frontier. But if frontier already contains it -- then delete. It's dead edge.
+
+                    // add triangle in triangulaton result
+                }
+                // delete edge from frontier
+                frontier.Remove(minEdge);
+            }
             return res;
         }
 
-        private Tuple<Point, Point> FindFirstEdge()
+        /// <summary>
+        /// Find first edge following to Jarvis gift-wrapping algorithm
+        /// </summary>
+        /// <returns></returns>
+        private Edge FindFirstEdge()
         {
             if (points?.Count == 0)
                 return null;
@@ -55,7 +76,7 @@ namespace CS_332_Delaunay_Triangulation
 
             }
 
-            return new Tuple<Point, Point>(startPoint, endPoint);
+            return new Edge(startPoint, endPoint);
 
 
         }
@@ -63,13 +84,42 @@ namespace CS_332_Delaunay_Triangulation
         private double CosBetween(Point a, Point b)
         {
             var dotProduct = a.X * b.X + a.Y * b.Y;
-            var lenA = Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2));
-            var lenB = Math.Sqrt(Math.Pow(b.X, 2) + Math.Pow(b.Y, 2));
+            var lenA = a.RadiusVector();
+            var lenB = b.RadiusVector();
             return dotProduct / (lenA * lenB);
         }
 
-        
+        private Point FindMate(Edge edge)
+        {
+            throw new NotImplementedException();
+        }
+       
+        public class Edge: IComparable<Edge>
+        {
+            Point a;
+            Point b;
 
+            public Edge(Point a, Point b)
+            {
+                this.a = a;
+                this.b = b;
+            }
+
+            public int CompareTo(Edge other)
+            {
+                if (a.LessThen(other.a)) return -1;
+                if (a.GreaterThen(other.a)) return 1;
+                if (b.LessThen(other.b)) return -1;
+                if (b.GreaterThen(other.b)) return 1;
+                return 0;
+            }
+        }
+
+        public struct Triangle
+        {
+            private Point a, b, c;
+        }
+        
 
     }
 }
