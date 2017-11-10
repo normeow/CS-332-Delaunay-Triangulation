@@ -9,7 +9,7 @@ using CS_332_Delaunay_Triangulation.Geometry;
 namespace CS_332_Delaunay_Triangulation
 {
     
-class Triangulation
+class Triangulator
     {
         private List<PointF> points;
         public List<Triangle> Triangulate(List<PointF> points)
