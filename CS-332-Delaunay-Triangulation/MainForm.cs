@@ -18,7 +18,6 @@ namespace CS_332_Delaunay_Triangulation
         private Triangulator triangulator = new Triangulator();
         private List<Triangulator.Triangle> triangulation;
 
-
         public MainForm()
         {
             InitializeComponent();
@@ -78,6 +77,12 @@ namespace CS_332_Delaunay_Triangulation
 
             g.DrawEllipse(Pens.Red, point.X - pointRadius, point.Y - pointRadius, pointRadius*2, pointRadius*2);
             pictureBox1.Refresh();
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearPictureBox();
+            points = new List<PointF>();
         }
     }
 }
