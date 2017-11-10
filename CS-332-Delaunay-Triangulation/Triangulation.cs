@@ -4,19 +4,20 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CS_332_Delaunay_Triangulation.Geometry;
 
 namespace CS_332_Delaunay_Triangulation
 {
-    class Triangulation
+    
+class Triangulation
     {
-        private List<Point> points;
-        public List<Tuple<Point, Point>> Triangulate(List<Point> points)
+        private List<PointF> points;
+        public List<Triangle> Triangulate(List<PointF> points)
         {
             this.points = points;
-            var res = new List<Tuple<Point, Point>>();
-            var frontier = new List<Edge>();
-            frontier.Add(FindFirstEdge());
-            
+            var res = new List<Triangle>();
+            var frontier = new List<Edge> {FindFirstEdge()};
+
             while (frontier.Count != 0)
             {
                 // find and exctract min edge
@@ -25,13 +26,29 @@ namespace CS_332_Delaunay_Triangulation
                 if (point != null)
                 {
                     // add new edges to frontier. But if frontier already contains it -- then delete. It's dead edge.
-
+                    updateFrontier(frontier, (PointF)point, minEdge.Origin);
+                    updateFrontier(frontier, minEdge.Destination, (PointF)point);
                     // add triangle in triangulaton result
+                    res.Add(new Triangle(minEdge.Origin, minEdge.Destination, (PointF)point));
                 }
                 // delete edge from frontier
                 frontier.Remove(minEdge);
             }
             return res;
+        }
+
+        private void updateFrontier(List<Edge> frontier, PointF a, PointF b)
+        {
+            var e = new Edge(a, b);
+            if (frontier.Contains(e)) // doesnt work appropriate
+            {
+                frontier.Remove(e);
+            }
+            else
+            {
+                e.Flip();
+                frontier.Add(e);
+            }
         }
 
         /// <summary>
@@ -43,7 +60,7 @@ namespace CS_332_Delaunay_Triangulation
             if (points?.Count == 0)
                 return null;
 
-            Point startPoint = points[0];
+            PointF startPoint = points[0];
 
             // the most left point
             foreach (var point in points)
@@ -56,7 +73,7 @@ namespace CS_332_Delaunay_Triangulation
             var minCos = 1.0;
             var endPoint = startPoint;
             
-            var srtartVector = new Point(0, startPoint.Y + 10);
+            var srtartVector = new PointF(0, startPoint.Y + 10);
             Console.WriteLine("StartVector: {0}", srtartVector);
             foreach (var point in points)
             {
@@ -64,7 +81,7 @@ namespace CS_332_Delaunay_Triangulation
                     continue;
 
                 Console.WriteLine("Current vec: {0}", point);
-                var cos = CosBetween(srtartVector, new Point(point.X - startPoint.X, point.Y - startPoint.Y));
+                var cos = CosBetween(srtartVector, new PointF(point.X - startPoint.X, point.Y - startPoint.Y));
 
                 Console.WriteLine("Cos: {0}", cos);
                 if (cos < minCos)
@@ -80,46 +97,68 @@ namespace CS_332_Delaunay_Triangulation
 
 
         }
-
-        private double CosBetween(Point a, Point b)
+        
+        private double CosBetween(PointF a, PointF b)
         {
-            var dotProduct = a.X * b.X + a.Y * b.Y;
+            var dotProduct = a.DotProduct(b);
             var lenA = a.RadiusVector();
             var lenB = b.RadiusVector();
             return dotProduct / (lenA * lenB);
         }
 
-        private Point FindMate(Edge edge)
+        private PointF? FindMate(Edge edge)
         {
-            throw new NotImplementedException();
+            PointF? mate = null;
+            // parameter for vectors intersection
+            var t = Double.MaxValue;
+            var bestT = t;
+            // get normal to the edge
+            Edge normal = new Edge(edge);
+            normal.Rotate();
+            foreach (var point in points)
+            {
+                if (IsRightPoint(edge, point))
+                {
+                    Edge g = new Edge(edge.Destination, point);
+                    // normal to edge g
+                    g.Rotate();
+                    // find point of intersections 2 normals
+                    t = -normal.Intersect(g); 
+                    if (t < bestT)
+                    {
+                        bestT = t;
+                        mate = point;
+                    }
+                }
+            }
+
+            return mate;
+        }
+
+        private bool IsRightPoint(Edge e, PointF point)
+        {
+            PointF a = e.Destination.Substract(e.Origin);
+            PointF b = point.Substract(e.Origin);
+            var sa = a.X * b.Y - b.X * a.Y;
+            return sa > 0;
         }
        
-        public class Edge: IComparable<Edge>
+
+        public class Triangle
         {
-            Point a;
-            Point b;
+            public PointF A { get; private set; }
+            public PointF B { get; private set; }
+            public PointF C { get; private set; }
 
-            public Edge(Point a, Point b)
+            public Triangle(PointF A, PointF B, PointF C)
             {
-                this.a = a;
-                this.b = b;
+                this.A = A;
+                this.B = B;
+                this.C = C;
             }
-
-            public int CompareTo(Edge other)
-            {
-                if (a.LessThen(other.a)) return -1;
-                if (a.GreaterThen(other.a)) return 1;
-                if (b.LessThen(other.b)) return -1;
-                if (b.GreaterThen(other.b)) return 1;
-                return 0;
-            }
-        }
-
-        public struct Triangle
-        {
-            private Point a, b, c;
         }
         
 
     }
+
 }
