@@ -14,8 +14,20 @@ namespace CS_332_Delaunay_Triangulation.Geometry
 
         public Edge(PointF origin, PointF destination)
         {
-            this.Origin = origin;
-            this.Destination = destination;
+            Origin = origin;
+            Destination = destination;
+        }
+
+        public Edge(float x1, float y1, float x2, float y2)
+        {
+            Origin = new PointF(x1, y1);
+            Destination = new PointF(x2, y2);
+        }
+
+        public Edge(Edge other)
+        {
+            Origin = other.Origin;
+            Destination = other.Destination;
         }
 
         public int CompareTo(Edge other)
