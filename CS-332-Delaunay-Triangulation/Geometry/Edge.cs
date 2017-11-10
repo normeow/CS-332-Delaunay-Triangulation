@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CS_332_Delaunay_Triangulation.Geometry
 {
-    public class Edge : IComparable<Edge>
+    public class Edge : IComparable<Edge>, IEquatable<Edge>
     {
         public PointF Origin { get; private set; }
         public PointF Destination { get; private set; }
@@ -77,6 +77,11 @@ namespace CS_332_Delaunay_Triangulation.Geometry
             }
 
             return t;
+        }
+
+        public bool Equals(Edge other)
+        {
+            return Origin == other.Origin && Destination == other.Destination;
         }
     }
 }
