@@ -9,29 +9,41 @@ namespace CS_332_Delaunay_Triangulation
 {
     public static class PointExtension
     {
-        public static bool LessThen(this Point point, Point other)
+        public static bool LessThen(this PointF point, PointF other)
         {
             return RadiusVector(point) < RadiusVector(other);
         }
 
-        public static bool GreaterThen(this Point point, Point other)
+        public static bool GreaterThen(this PointF point, PointF other)
         {
             return RadiusVector(point) > RadiusVector(other);
         }
 
-        public static double RadiusVector(this Point point)
+        public static double RadiusVector(this PointF point)
         {
             return Math.Sqrt(Math.Pow(point.X, 2) + Math.Pow(point.Y, 2));
         }
 
-        public static double DotProduct(this Point a, Point b)
+        public static double DotProduct(this PointF a, PointF b)
         {
             return a.X * b.X + a.Y * b.Y;
         }
 
-        public static Point Substract(this Point point, Point other)
+        public static PointF Substract(this PointF point, PointF other)
         {
-            return new Point(point.X - other.X, point.Y - other.Y);
+            return new PointF(point.X - other.X, point.Y - other.Y);
         }
+
+        public static PointF Add(this PointF point, PointF other)
+        {
+            return new PointF(point.X + other.X, point.Y + other.Y);
+        }
+
+        public static PointF Multiply(this PointF point, float x)
+        {
+            return new PointF(point.X * x, point.Y * x);
+        }
+
     }
+
 }
